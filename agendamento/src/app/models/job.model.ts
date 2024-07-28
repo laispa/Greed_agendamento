@@ -32,8 +32,7 @@ export class ScheduleLateness{
     name!: string;
     start!: number;
     finish!: number;
-    lateness!: number;  // Usando Moment.js para representar a data/hora
-
+    lateness!: number; 
     
 }
 

@@ -1,0 +1,9 @@
+Nº,Nome da Tarefa,Horário Início,Horário de Fim,Atraso
+1,Tarefa 6,Dia 1 às 08:00,Dia 1 às 10:00,00:00
+2,Tarefa 8,Dia 1 às 10:00,Dia 1 às 11:00,00:00
+3,Tarefa 7,Dia 1 às 11:00,Dia 1 às 15:00,00:00
+4,Tarefa 2,Dia 1 às 15:00,Dia 1 às 17:00,00:00
+5,Tarefa 5,Dia 1 às 17:00,Dia 1 às 20:00,03:00
+6,Tarefa 1,Dia 1 às 20:00,Dia 1 às 23:00,02:00
+7,Tarefa 4,Dia 1 às 23:00,Dia 2 às 03:00,05:00
+8,Tarefa 3,Dia 2 às 03:00,Dia 2 às 04:00,05:00

@@ -56,7 +56,7 @@ export class AppComponent {
   createItemLateness(): FormGroup {
     this.jobCounterLateness +=1;
     return this.fb.group({
-      name: [`Job ${this.jobCounterLateness}`, Validators.required],
+      name: [`Tarefa ${this.jobCounterLateness}`, Validators.required],
       duration: [null, Validators.required],
       deadline: [null, Validators.required]
     });
@@ -65,7 +65,7 @@ export class AppComponent {
   createItemMax(): FormGroup {
     this.jobCounterMax +=1;
     return this.fb.group({
-      name: [`Job ${this.jobCounterMax}`, Validators.required],
+      name: [`Tarefa ${this.jobCounterMax}`, Validators.required],
       start: [null, [Validators.required, this.timeValidator]],
       finish: [null, [Validators.required, this.timeValidator]]
     });
@@ -78,17 +78,11 @@ export class AppComponent {
   }
 
   removeItem(index: number) {
-    if(this.type == 1 )
+    if(this.type == 1 ){
       this.jobsLateness.removeAt(index);
+    }
     else this.jobsMax.removeAt(index)
   }
-
-
-
-
-
-
-
 
 
   timeValidator(control: AbstractControl): ValidationErrors | null {
@@ -108,7 +102,6 @@ export class AppComponent {
   resultMax(){
     console.log(this.scheduleMaxForm.value);
     this.schedule = this.scheduleIntervals(this.jobsMax.value);
-    console.log("hh", this.schedule)
 
   }
 
@@ -229,7 +222,6 @@ export class AppComponent {
       const start = time;
       const finish = time + Number(job.duration);
       const lateness = Math.max(0, finish - Number(job.deadline));
-      console.log(lateness, finish,job.deadline)
       if(lateness > this.latenessMax){
         this.latenessMax = lateness;
       }
