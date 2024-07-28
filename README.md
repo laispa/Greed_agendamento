@@ -38,10 +38,10 @@ Para rodar este projeto, você precisará ter as seguintes ferramentas instalada
     Instale globalmente utilizando o comando:
         npm install -g @angular/cli
 
-Depois de baixar as depedências necessárias basta clone o reposítorio, ir na pasta agendamento e executar os seguintes comandos:
+Depois de baixar as depedências necessárias basta clonar o reposítorio, ir na pasta agendamento e executar os seguintes comandos:
 1. npm install
 2. ng serve
 
 ## Uso 
-Após entrar no site, basta escolher o tipo de agendamento e preencher os campos necessários
+Após entrar no site, basta escolher o tipo de agendamento e preencher os campos necessários.
 
