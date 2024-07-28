@@ -2,68 +2,147 @@
   <h1 class="d-flex justify-content-center">Bem vindo(a)!</h1>
   
   <h2 class="d-flex justify-content-center">Faça o agendamento das suas tarefas do dia!</h2>
+
+  <h5>Escolha o tipo de agendamento</h5>
+  <button type="button" class="btn btn-primary" (click)="choiceSchedule(0)">Agendar o máximo de tarefas possível</button>
+  <button type="button" class="mx-2 btn btn-success" (click)="choiceSchedule(1)">Agendar todas as tarefas com o menor atraso</button>
 </div>
 
 
-<form [formGroup]="myForm" (ngSubmit)="onSubmit()" class="container mt-4">
-  <div class="col-md-3">
-    <label for="startTime" class="sr-only">Horário de Início</label>
-    <input id="startTime" type="text" formControlName="startTime" class="form-control" placeholder="HH:MM">
-    <div *ngIf="myForm.get('startTime')?.invalid && myForm.get('startTime')?.touched" class="text-danger">
-      <small *ngIf="myForm.get('startTime')?.errors?.['required']">Horário de início é obrigatório.</small>
-      <small *ngIf="myForm.get('startTime')?.errors?.['invalidTime']">Formato inválido. Use HH:MM.</small>
-    </div>
-  </div>
-  <div formArrayName="jobs">
-    <div *ngFor="let item of jobs.controls; let i = index" [formGroupName]="i" class="row  mb-3">
-      <div class="col-md-3">
-        <label for="name-{{i}}" class="sr-only">Nome da Tarefa</label>
-        <input id="name-{{i}}" type="text" formControlName="name" class="form-control" placeholder="Name">
-      </div>
-      <div class="col-md-3">
-        <label for="duration-{{i}}" class="sr-only">Duração</label>
-        <input id="duration-{{i}}" type="number" formControlName="duration" class="form-control" placeholder="Duração em horas">
-      </div>
-      <div class="col-md-3">
-        <label for="deadline-{{i}}" class="sr-only">Deadline</label>
-        <input id="deadline-{{i}}" type="number" formControlName="deadline" class="form-control" placeholder="Deadline em horas">
-      </div>
-      <div class="col-md-3 align-items-end d-flex">
-        <button type="button" class="btn btn-danger" (click)="removeItem(i)">Remover</button>
+<ng-container *ngIf="type==1">
+  <form  [formGroup]="scheduleLatenessForm" class="container mt-4">
+    <div class="col-md-3">
+      <label for="startTime" class="sr-only">Horário de Início</label>
+      <input id="startTime" type="text" formControlName="startTime" class="form-control" placeholder="HH:MM">
+      <div *ngIf="scheduleLatenessForm.get('startTime')?.invalid && scheduleLatenessForm.get('startTime')?.touched" class="text-danger">
+        <small *ngIf="scheduleLatenessForm.get('startTime')?.errors?.['required']">Horário de início é obrigatório.</small>
+        <small *ngIf="scheduleLatenessForm.get('startTime')?.errors?.['invalidTime']">Formato inválido. Use HH:MM.</small>
       </div>
     </div>
+    <div formArrayName="jobs">
+      <div *ngFor="let item of jobsLateness.controls; let i = index" [formGroupName]="i" class="row  mb-3">
+        <div class="col-md-3">
+          <label for="name-{{i}}" class="sr-only">Nome da Tarefa</label>
+          <input id="name-{{i}}" type="text" formControlName="name" class="form-control" placeholder="Name">
+        </div>
+        <div class="col-md-3">
+          <label for="duration-{{i}}" class="sr-only">Duração</label>
+          <input id="duration-{{i}}" type="number" formControlName="duration" class="form-control" placeholder="Duração em horas">
+
+        </div>
+        <div class="col-md-3">
+          <label for="deadline-{{i}}" class="sr-only">Deadline</label>
+          <input id="deadline-{{i}}" type="number" formControlName="deadline" class="form-control" placeholder="Deadline em horas">
+        </div>
+        <div class="col-md-3 align-items-end d-flex">
+          <button type="button" class="btn btn-danger" (click)="removeItem(i)">Remover</button>
+        </div>
+      </div>
+    </div>
+    <button type="button" class="btn btn-primary" (click)="addItem()">Adicionar nova tarefa</button>
+    <button [disabled]="scheduleLatenessForm.invalid" type="button" class="mx-2 btn btn-success" (click)="resultLateness()">Agendar</button>
+  </form> 
+  
+  <div class="container my-5" *ngIf="scheduleLateness.length > 0">
+    <h2>Agendamento</h2>
+    <button class="btn btn-primary mb-3" (click)="exportToCSVLateness()">Exportar para CSV</button>
+
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">Nº</th>
+          <th scope="col">Nome da Tarefa</th>
+          <th scope="col">Horário Início</th>
+          <th scope="col">Horário de Fim</th>
+          <th scope="col">Atraso</th>
+  
+  
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of scheduleLateness; let i = index">
+          <th scope="row">{{ i + 1 }}</th>
+          <td>{{ item.name }}</td>
+          <td>{{ convertDay(item.start) }}</td>
+          <td>{{ convertDay(item.finish) }}</td>
+          <td>{{ convertHourToHHMM(item.lateness) }}</td>
+  
+        </tr>
+      </tbody>
+    </table>
   </div>
-  <button type="button" class="btn btn-primary" (click)="addItem()">Adicionar nova tarefa</button>
-  <button [disabled]="myForm.invalid" type="submit" class="mx-2 btn btn-success">Agendar</button>
-</form> 
-
-<div class="container my-5" *ngIf="schedule.length > 0">
-  <h2>Agendamento</h2>
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">Nome da Tarefa</th>
-        <th scope="col">Horário Início</th>
-        <th scope="col">Horário de Fim</th>
-        <th scope="col">Atraso</th>
+  
+  <div class="container pb-5">
+    <h5 *ngIf="schedule.length > 0">O atraso máximo foi de {{latenessMax}} horas</h5>
+  </div>
+  
+</ng-container>
 
 
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let item of schedule; let i = index">
-        <th scope="row">{{ i + 1 }}</th>
-        <td>{{ item.name }}</td>
-        <td>{{ convertMinutesToHoursDay(item.start) }}</td>
-        <td>{{ convertMinutesToHoursDay(item.finish) }}</td>
-        <td>{{ convertMinutesToHours(item.lateness) }}</td>
+<ng-container *ngIf="type==0">
 
-      </tr>
-    </tbody>
-  </table>
-</div>
+  <div class="container py-3">
+    <h5>Considere tarefas que comecem 00h até 23:59h do mesmo dia</h5>
+  </div>
+  <form  [formGroup]="scheduleMaxForm" class="container mt-4">
+    <div formArrayName="jobs">
+      <div *ngFor="let item of jobsMax.controls; let i = index" [formGroupName]="i" class="row  mb-3">
+        <div class="col-md-3">
+          <label for="name-{{i}}" class="sr-only">Nome da Tarefa</label>
+          <input id="name-{{i}}" type="text" formControlName="name" class="form-control" placeholder="Name">
+          
+        </div>
+        <div class="col-md-3">
+          <label for="start-{{i}}" class="sr-only">Horário de Início</label>
+          <input id="start-{{i}}" type="text" formControlName="start" class="form-control" placeholder="Horário de Início em HH:MM">
+          <div *ngIf="item.get('start')?.invalid && item.get('start')?.touched" class="text-danger">
+            <small *ngIf="item.get('start')?.errors?.['required']">Horário de início é obrigatório.</small>
+            <small *ngIf="item.get('start')?.errors?.['invalidTime']">Formato inválido. Use HH:MM.</small>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <label for="finish-{{i}}" class="sr-only">Horário de fim</label>
+          <input id="finish-{{i}}" type="text" formControlName="finish" class="form-control" placeholder="Horário de fim em HH:MM">
+          <div *ngIf="item.get('finish')?.invalid && item.get('finish')?.touched" class="text-danger">
+            <small *ngIf="item.get('finish')?.errors?.['required']">Horário de início é obrigatório.</small>
+            <small *ngIf="item.get('finish')?.errors?.['invalidTime']">Formato inválido. Use HH:MM.</small>
+          </div>
+        </div>
+        <div class="col-md-3 align-items-end d-flex">
+          <button type="button" class="btn btn-danger" (click)="removeItem(i)">Remover</button>
+        </div>
+      </div>
+    </div>
+    <button type="button" class="btn btn-primary" (click)="addItem()">Adicionar nova tarefa</button>
+    <button [disabled]="scheduleMaxForm.invalid" type="button" class="mx-2 btn btn-success" (click)="resultMax()">Agendar</button>
+  </form> 
+  
+  <div class="container py-5" *ngIf="schedule.length > 0">
+    <h2>Agendamento</h2>
+    <button class="btn btn-primary mb-3" (click)="exportToCSVSchedule()">Exportar para CSV</button>
 
-<div class="container pb-5">
-  <h5 *ngIf="schedule.length > 0">O atraso máximo foi de {{latenessMax}} horas</h5>
-</div>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">Nº</th>
+          <th scope="col">Nome da Tarefa</th>
+          <th scope="col">Horário Início</th>
+          <th scope="col">Horário de Fim</th>
+  
+  
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of schedule; let i = index">
+          <th scope="row">{{ i + 1 }}</th>
+          <td>{{ item.name }}</td>
+          <td>{{ item.start }}</td>
+          <td>{{ item.finish}}</td>
+  
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+</ng-container>
+
