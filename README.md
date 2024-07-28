@@ -24,10 +24,10 @@ A criação de um site que faz o agendamento de tarefas para o usuário terá do
 Após realizar o agendamento o usuário poderá salvar as suas tarefas em um arquivo csv.
 
 ## Screenshots
-<img src="imagens_e_csv/agendamentoMax-1.png" alt="" width="300">
-<img src="imagens_e_csv/agendamentoMax-2.png" alt="" width="300">
-<img src="imagens_e_csv/agendamentoAtraso-1.png" alt="" width="300">
-<img src="imagens_e_csv/agendamentoAtraso-2.png" alt="" width="300">
+<img src="imagens_e_csv/agendamentoMax-1.png" alt="" width="600">
+<img src="imagens_e_csv/agendamentoMax-2.png" alt="" width="600">
+<img src="imagens_e_csv/agendamentoAtraso-1.png" alt="" width="600">
+<img src="imagens_e_csv/agendamentoAtraso-2.png" alt="" width="600">
 
 ## Instalação 
 **Linguagem**: Typescript<br>
